@@ -7,9 +7,10 @@ import Footer from "@components/Footer.astro";
 interface Props {
   title: string;
   description: string;
+  hideMetadata?: boolean;
 }
 
-const { title, description } = Astro.props;
+const { title, description, hideMetadata = false } = Astro.props;
 ---
 
 <style>
@@ -38,7 +39,11 @@ const { title, description } = Astro.props;
 
 <html lang="en">
   <head>
-    <BaseHead title={title} description={description} />
+    <BaseHead
+      title={title}
+      description={description}
+      hideMetadata={hideMetadata}
+    />
   </head>
   <body>
     <div class="content">
