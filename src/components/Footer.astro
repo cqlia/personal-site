@@ -1,0 +1,88 @@
+<script>
+  const elements = ["🪻", "🪷", "🌷"];
+
+  /**
+   * generates a random item from the provided dictionary, using the provided weights
+   */
+  function weightedRandom(weights: Record<string, number>): string {
+    const maxSum = Object.values(weights).reduce((a, c) => a + c, 0);
+    const selection = Math.random() * maxSum;
+
+    let weightSum = 0.0;
+
+    for (const [item, weight] of Object.entries(weights)) {
+      weightSum += weight;
+      if (weightSum >= selection) {
+        return item;
+      }
+    }
+
+    throw new RangeError("weighted random failure");
+  }
+
+  function generateElements() {
+    const elementWeights = Object.fromEntries(
+      elements.map((e) => {
+        return [e, 1.0];
+      }),
+    );
+
+    const chosenElements = [];
+    for (let i = 0; i < 3; i++) {
+      const chosen = weightedRandom(elementWeights);
+      chosenElements.push(chosen);
+
+      // make it less likely to select older elements
+      elementWeights[chosen] -= 0.85;
+      elementWeights[chosen] = Math.max(0, elementWeights[chosen]);
+    }
+
+    return chosenElements;
+  }
+
+  /**
+   * generates and sets the elements to the provided HTML element
+   */
+  export function setElements(element: HTMLElement) {
+    const generated = generateElements();
+    element.innerText = generated.join("");
+  }
+
+  class GeneratedFooter extends HTMLElement {
+    connectedCallback() {
+      const disableAnimation =
+        window.matchMedia(`(prefers-reduced-motion: reduce)`).matches === true;
+      const elemId = this.querySelector<HTMLDivElement>("span");
+
+      if (elemId) {
+        setElements(elemId);
+
+        if (!disableAnimation) {
+          setInterval(() => {
+            setElements(elemId);
+          }, 5000);
+        }
+      }
+    }
+  }
+
+  customElements.define("generated-footer", GeneratedFooter);
+</script>
+
+<style>
+  generated-footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
+
+  generated-footer span {
+    letter-spacing: 0.25em;
+    font-size: 2em;
+  }
+</style>
+
+<generated-footer>
+  <span>🪻🪷🌷</span>
+</generated-footer>

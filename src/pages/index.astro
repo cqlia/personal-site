@@ -1,0 +1,95 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+
+import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+
+import { getCollection } from "astro:content";
+import FormattedDate from "@components/FormattedDate.astro";
+
+const posts = (await getCollection("posts")).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+---
+
+<BaseLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
+  <main>
+    <div class="header">
+      <h1>hi</h1>
+      <div class="face">&gt;_&lt;</div>
+    </div>
+    <div class="links">
+      <a href="https://github.com/cqlia">github</a>
+      <a href="https://bsky.app/profile/celosia.zip">bsky</a>
+    </div>
+
+    <div class="posts">
+      {
+        posts.map((post) => (
+          <a href={`/posts/${post.id}/`} class="post">
+            <h2 class="post-title">{post.data.title}</h2>
+            <div class="post-subtitle">
+              <FormattedDate date={post.data.pubDate} />
+            </div>
+          </a>
+        ))
+      }
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  h1 {
+    font-size: 2.5em;
+    font-weight: 400;
+  }
+
+  .header .face {
+    font-size: 2em;
+    font-weight: inherit;
+  }
+
+  main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    gap: 0.75em;
+  }
+
+  .post {
+    text-decoration-line: none;
+  }
+
+  .post-title {
+    font-size: 1.3em;
+    font-weight: 500;
+    text-decoration: underline;
+    margin-bottom: 0.5rem;
+  }
+
+  a:active {
+    color: var(--link-active-color);
+  }
+
+  .post:active .post-title {
+    color: var(--link-active-color);
+  }
+
+  .posts {
+    padding-top: 1em;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+  }
+
+  .post-subtitle {
+    color: var(--text-color);
+  }
+</style>

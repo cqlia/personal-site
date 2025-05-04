@@ -1,0 +1,10 @@
+p {
+  text-align: justify;
+  hyphens: auto;
+  hyphenate-limit-lines: 2;
+  hyphenate-limit-chars: 6 3 2;
+}
+
+pre {
+  padding: 0.5rem;
+}

@@ -1,0 +1,8 @@
+:root {
+  color-scheme: light dark;
+  --text-color: light-dark(black, white);
+  --link-active-color: light-dark(
+    oklch(64.5% 0.246 16.439),
+    oklch(75% 0.183 55.934)
+  );
+}

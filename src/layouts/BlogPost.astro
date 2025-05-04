@@ -1,0 +1,75 @@
+---
+import "../styles/markdown.css";
+
+import BaseLayout from "./BaseLayout.astro";
+
+import ArrowLeft from "@assets/arrow_left.svg";
+
+import type { CollectionEntry } from "astro:content";
+import FormattedDate from "@components/FormattedDate.astro";
+
+type Props = CollectionEntry<"posts">["data"];
+
+const { title, description, pubDate, updatedDate } = Astro.props;
+---
+
+<BaseLayout title={title} description={description}>
+  <main>
+    <article>
+      <div>
+        <div>
+          <div class="title-container">
+            <a href="/" title="go back" class="back-button">
+              <ArrowLeft />
+            </a>
+            <h1>{title}</h1>
+          </div>
+          <div class="date-container">
+            Posted <FormattedDate date={pubDate} />
+            {
+              updatedDate && (
+                <div class="last-updated-on">
+                  Last updated on <FormattedDate date={updatedDate} />
+                </div>
+              )
+            }
+          </div>
+        </div>
+        <slot />
+      </div>
+    </article>
+  </main>
+</BaseLayout>
+
+<style>
+  .title-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .back-button {
+    border-radius: 50%;
+    aspect-ratio: 1/1;
+    outline: thin solid oklch(50% 0 0);
+    color: var(--text-color);
+  }
+
+  .back-button:focus,
+  .back-button:active {
+    outline: medium solid oklch(from var(--link-active-color) l c h / 0.5);
+    color: var(--link-active-color);
+  }
+
+  .back-button svg {
+    vertical-align: -0.14rem;
+  }
+
+  main {
+    padding: 1em;
+  }
+
+  .date-container {
+    font-style: italic;
+  }
+</style>
